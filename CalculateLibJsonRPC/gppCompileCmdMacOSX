@@ -1,0 +1,1 @@
+g++ -I/usr/local/include -I/opt/local/include src/server/CalculateServer.cpp -L/usr/local/lib -ljsoncpp -lmicrohttpd -ljsonrpccpp-common -ljsonrpccpp-server -o sampleserver
