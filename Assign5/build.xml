@@ -1,0 +1,72 @@
+<project name="Ser321 Assign4 C++ Message GUI build file based on sample build file."
+         default="targets" basedir="."
+         xmlns="antlib:org.apache.tools.ant">
+   <taskdef resource="cpptasks.tasks"/>
+   <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+   <property name="src" value="./src" />
+   <property name="lib" value="./lib" />
+   <property name="src.cpp.dir" value="src"/>
+   <property name="obj.dir" value="obj"/>
+   <property name="dist.dir" value="bin"/>
+   <property name="omdbkey" value="myomdbkey"/>
+   <property environment="env"/>
+   <property name="userId" value="${env.USER}"/>
+
+   <target name="targets">
+     <echo message="targets are clean, prepare, build, execute, targets"/>
+     <echo message="to run student sample enter: ant execute -DuserId=${userId} -Domdbkey=${omdbkey}"/>
+   </target>
+
+   <target name="clean">
+     <delete dir="${obj.dir}" failonerror="false"/>
+     <delete dir="${dist.dir}" failonerror="false"/>
+   </target>
+
+   <target name="prepare">
+      <!-- Create the time stamp -->
+      <tstamp/>
+      <!-- Create the build directory structure used by compile -->
+      <echo message="home defined as: ${env.HOME}" />
+      <mkdir dir="${dist.dir}" />
+      <mkdir dir="${obj.dir}" />
+      <if>
+         <isset property="env.USERNAME"/>
+         <then>
+           <echo message="detected username is: ${env.USERNAME}"/>
+          </then>
+      <elseif>
+         <isset property="env.USER"/>
+         <then>
+            <echo message="detected user is: ${env.USER}"/>
+          </then>
+      </elseif>
+      </if>
+      <echo message="host name is: ${os.name}"/>
+      <echo message="host arch is: ${os.arch}"/>
+      <echo message="host version is: ${os.version}"/>
+      <echo message="base directory is: ${basedir}"/>
+   </target>
+
+   <target name="build" depends="prepare">
+      <cc outtype="executable" subsystem="console"
+          outfile="${dist.dir}/cppSeriesLibrary"
+          objdir="${obj.dir}">
+	  <compilerarg value="-std=c++14"/>
+          <includepath>
+             <dirset dir="/" includes="usr/include,usr/local/include,usr/include/jsoncpp"/>
+          </includepath>
+          <libset dir="/usr/lib" libs="stdc++,fltk,fltk_images,curl,jsoncpp,pthread"/>
+          <libset dir="/usr/local/lib" libs="curlpp"/>
+          <fileset dir="${src.cpp.dir}/client/" includes="MediaClientGui.cpp, SeriesSeason.cpp, Episode.cpp, MediaLibrary.cpp,samplemain.cpp"/>
+      </cc>
+   </target>
+
+   <target name="execute" depends="build">
+     <echo message="./bin/cppSeriesLibrary ${userId} ${omdbkey}"/>
+     <exec executable="./bin/cppSeriesLibrary">
+       <arg line= "${userId} ${omdbkey}"/>
+     </exec>
+   </target>
+
+</project>
