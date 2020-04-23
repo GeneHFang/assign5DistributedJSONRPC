@@ -479,8 +479,14 @@ public:
 };
 
 int main(int argc, char * argv[]) {
-   
-   std::cout << "before main begins" << std::endl;
+   std::string host = "http://127.0.0.1:8080";
+   if(argc>1){
+      host = string(argv[1]);
+   }
+
+   HttpClient httpclient(host);
+   studentcollectionstub sc(httpclient);
+
    std::string developer = (argc>1)?argv[1]:"Tim.Lindquist";
    std::string omdbkey = (argc>2)?argv[2]:"omdbkey";
    std::string windowTitle = developer + "'s SeriesSeason Browser";
