@@ -90,7 +90,7 @@ public:
    std::string omdbkey;
 
    std::thread * playThread;
-   medialibrarystub * mlStub;
+   const medialibrarystub * mlStub;
    MediaLibrary * library;
    MediaLibrary * searchLibrary;
 
