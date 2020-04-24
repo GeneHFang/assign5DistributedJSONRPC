@@ -6,7 +6,7 @@
     },
     {
         "method": "initLibraryFromJsonFile",
-        "params":["string"],
+        "params":[],
         "returns": { }
     },
     {   
