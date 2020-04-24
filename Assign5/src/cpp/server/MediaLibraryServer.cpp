@@ -39,25 +39,32 @@
 using namespace jsonrpc;
 using namespace std;
 
+//server stub
 class MediaLibraryServer : public medialibraryserverstub {
 public:
-   MediaLibraryServer(AbstractServerConnector &connector, int port);
-   virtual std::string serviceInfo();
-   virtual bool toJsonFile();
-   virtual Json::Value initLibraryFromJsonFile();
-   virtual bool addLibrary(const Json::Value& aLibraryJson);
-   virtual bool addToLibrary(const Json::Value& aSeriesSeasonJson);
-   virtual bool removeFromLibrary(const std::string& key);
-   virtual Json::Value getJson();
-   virtual Json::Value get(const std::string& aTitle);
-   virtual Json::Value getTitles();
+   MediaLibraryServer(AbstractServerConnector &connector, int port); //Constructor
+   virtual std::string serviceInfo(); //unused
+   virtual bool toJsonFile(); //Saves library to seriesTest.json
+   virtual Json::Value initLibraryFromJsonFile(); //Restores library from seriesTest.json
+   virtual bool addLibrary(const Json::Value& aLibraryJson); //Appends contents of a libraryJson to server library
+   virtual bool addToLibrary(const Json::Value& aSeriesSeasonJson); //Adds a SeriesSeason to server library
+   virtual bool removeFromLibrary(const std::string& key); //Removes a SeriesSeason from server library
+   virtual Json::Value getJson(); //Returns the server library formatted as Json
+   virtual Json::Value get(const std::string& aTitle); //Returns a Json formatted SeriesSeason from server library with key
+   virtual Json::Value getTitles(); //Returns a Json formatted array of all keys in server library 
    
 private: 
-   MediaLibrary * library;
-   MediaLibrary * searchLibrary; 
-   int portNum;
+   MediaLibrary * library; //server library
+   MediaLibrary * searchLibrary; //unused
+   int portNum; //port number connection is on
 };
 
+/**
+ *Refer to the class declaration for medialibraryserverstub above for general purpose of functions 
+ *Any comments on function implementations are additional details, if any  
+*/
+
+//Constructor creates a MediaLibrary object from seriesTest.json that rests on server 
 MediaLibraryServer::MediaLibraryServer(AbstractServerConnector &connector, int port) :
                              medialibraryserverstub(connector){
    library = new MediaLibrary();
@@ -65,6 +72,7 @@ MediaLibraryServer::MediaLibraryServer(AbstractServerConnector &connector, int p
    portNum = port;
 }
 
+//Originally copied from example, but found that I did not need to use it
 string MediaLibraryServer::serviceInfo(){
    std::string msg =
                 "SeriesSeason collection management service.";
@@ -174,12 +182,11 @@ int main(int argc, char * argv[]) {
    std::signal(SIGTSTP, ex);
    cout << "Student collection server listening on port " << port
       //<< " press return/enter to quit." << endl;
-        << " use ps to get pid. To quit: kill -9 pid " << endl;
+        << " use ps to get pid. To quit: kill -9 pid or press CTRL+C " << endl;
    ss.StartListening();
    while(true){
-      //think that's all I need?
+      //Since all methods are called via clientside GUI, this while loop is intentionally empty to enable server to listen to client method calls
    }
-   //int c = getchar();
    ss.StopListening();
    return 0;
 }

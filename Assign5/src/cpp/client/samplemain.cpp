@@ -494,7 +494,7 @@ int main(int argc, char * argv[]) {
       std::string developer = (argc>1)?argv[1]:"Tim.Lindquist";
       std::string omdbkey = (argc>2)?argv[2]:"omdbkey";
       std::string windowTitle = developer + "'s SeriesSeason Browser";
-      MediaClient cm(windowTitle.c_str(),omdbkey.c_str(),ml);
+      MediaClient cm(windowTitle.c_str(),omdbkey.c_str(),ml); //pointer to stub passed to MediaClient
       ret = Fl::run();
 
    }

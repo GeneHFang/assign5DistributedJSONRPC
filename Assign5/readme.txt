@@ -5,13 +5,11 @@ Version: April 2020
 
 See http://pooh.poly.asu.edu/Ser321/Assigns/Assign4/assign4.html
 
-Purpose: Assignment 4 based on sample C++ program demonstrating Ant builds and an FLTK
- GUI for SeriesSeason Browser.
+Purpose: Assignment 5 based on sample C++ programs demonstrating Ant builds and an FLTK
+ GUI for SeriesSeason Browser and StudentCollectionJsonRPC.
 
-This program is has been tested on Linux and MacOS (build.xml only works on
+This program is has been tested on Linux (build.xml only works on
 Linux).
-
-*****NOTE: series.json is replaced with seriesTest.json******
 
 To execute Ant using the build.xml in this directory, you will need to
 copy the file: antlibs.jar from the lib directory to your home directory:
@@ -43,12 +41,32 @@ require that libcurl first be installed, if its not already present.
    sudo ldconfig
 To see the make options available do: make help. You will need to have cmake and make installed (you can use apt-get install the same way as for installing other packages). 
 
-To run the example GUI, from a bash shell in the project directory, execute the
-command:
-ant execute.sample -Domdbkey=myomdbkey
 
-if you have your key in the file omdb.key then use:
-ant execute.sample -Domdbkey=`cat omdb.key`
+
+*****
+NOTES: 
+  -series.json is replaced with seriesTest.json
+  -build targets are build.cpp.client and build.cpp.server are replaced with build.client and build.server
+  -there is a need for clientside to maintain a copy of the MediaLibrary class and its dependencies (SeriesSeason and Episode) due to nature
+   of implementation. (Clientside holds a local search library that is added or saved to server. Refreshing on clientside will rebuild tree based on server library)
+  -in the case of multiple client side users, if one client adds or saves to server side library, other clients must click file->tree refresh to update their tree 
+******
+
+
+Contains both Client and Server side code
+To run, start Server first, then any Clients. 
+
+To start server,
+from a bash shell in the project directory execute the command:
+***note: any valid port number works***
+ant server -Dport.num=8080  
+
+To start client,
+from a bash shell in the project directory execute the command:
+***note: replace 127.0.0.1 with IP of server, and match server's port number***
+ant client -DuserId=yourName -Domdbkey=yourOmdbKey -Dhost.name=127.0.0.1 -Dport.num=8080
+
+if you have your key in the file omdb.key then replace yourOmdbKey above with `cat omdb.key`
 
 To clean the project (remove the executable files) execute:
 ant clean
