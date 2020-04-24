@@ -338,11 +338,11 @@ public:
       // cout << "Selected Menu Path: " << selectPath << endl;
       // Handle menu selections
       if(selectPath.compare("File/Save")==0){ //save library to server's seriesTest.json 
-         bool restSave = mlStub->toJsonFile("seriesTest.json");
+         bool restSave = mlStub->toJsonFile();
          // cout << "Save not implemented" << endl;
       }else if(selectPath.compare("File/Restore")==0){ //load library from seriesTest.json
          //Restore tree from seriesTest
-         mlStub->initLibraryFromJsonFile("seriesTest.json");
+         mlStub->initLibraryFromJsonFile();
          buildTree();
          // cout << "Restore not implemented" << endl;
       }else if(selectPath.compare("File/Tree Refresh")==0){ //largely unneeded, as adding and removing both refresh tree
