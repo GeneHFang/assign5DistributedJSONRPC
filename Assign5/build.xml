@@ -1,4 +1,4 @@
-<project name="Ser321 Assign4 C++ Message GUI build file based on sample build file."
+<project name="Ser321 Assign5 C++ Message GUI build file based on sample build file."
          default="targets" basedir="."
          xmlns="antlib:org.apache.tools.ant">
    <taskdef resource="cpptasks.tasks"/>
@@ -6,21 +6,43 @@
 
    <property name="src" value="./src" />
    <property name="lib" value="./lib" />
-   <property name="src.cpp.dir" value="src"/>
+   <!-- <property name="src.cpp.dir" value="src"/> -->
+   <property name="src.dir" value="src"/>
    <property name="obj.dir" value="obj"/>
    <property name="dist.dir" value="bin"/>
+   <property name="host.name" value="127.0.0.1"/>
+   <property name="port.num" value="8080"/>
    <property name="omdbkey" value="myomdbkey"/>
    <property environment="env"/>
    <property name="userId" value="${env.USER}"/>
+   <property name="json.file.name" value="MediaLibraryMethods.json"/>
 
    <target name="targets">
-     <echo message="targets are clean, prepare, build, execute, targets"/>
-     <echo message="to run student sample enter: ant execute -DuserId=${userId} -Domdbkey=${omdbkey}"/>
+     <echo message="targets are clean, prepare, build.server, build.client, generate.server.stub, generate.client.stub, targets"/>
+     <echo message="to run server enter: ./bin/mediaLibraryServer ${port-num}"/>
+     <echo message="to run client enter: ./bin/mediaLibraryClient ${userId} ${omdbkey} http://${host.name}:${port.num} "/>
    </target>
 
+   <path id="compile.classpath">
+      <pathelement location="${classes.dir}"/>
+      <fileset dir="${basedir}/lib">
+        <include name="json.jar"/>
+      </fileset>
+   </path>
+
    <target name="clean">
-     <delete dir="${obj.dir}" failonerror="false"/>
-     <delete dir="${dist.dir}" failonerror="false"/>
+      <delete dir="${classes.dir}" failonerror="false"/> 
+      <delete dir="${obj.dir}" failonerror="false"/>
+      <delete dir="${dist.dir}" failonerror="false"/>
+      
+      <delete dir="log" failonerror="false"/>
+      <delete file="log.txt" failonerror="false"/>
+      <delete file="logerrors.txt" failonerror="false"/>
+      <delete file="logpid.txt" failonerror="false"/>
+      <delete file="${src.dir}/cpp/server/medialibraryserverstub.h"
+              failonerror="false"/>
+      <delete file="${src.dir}/cpp/client/medialibrarystub.h"
+              failonerror="false"/>
    </target>
 
    <target name="prepare">
@@ -28,8 +50,11 @@
       <tstamp/>
       <!-- Create the build directory structure used by compile -->
       <echo message="home defined as: ${env.HOME}" />
+      <mkdir dir="${classes.dir}"/>
       <mkdir dir="${dist.dir}" />
-      <mkdir dir="${obj.dir}" />
+      <mkdir dir="log" />
+      <mkdir dir="${obj.dir}/client" />
+      <mkdir dir="${obj.dir}/server" />
       <if>
          <isset property="env.USERNAME"/>
          <then>
@@ -48,25 +73,61 @@
       <echo message="base directory is: ${basedir}"/>
    </target>
 
-   <target name="build" depends="prepare">
+    <target name="generate.client.stub" depends="prepare">
+      <exec dir="${basedir}" executable="jsonrpcstub">
+         <arg line="${json.file.name} --cpp-client=medialibrarystub"/>
+      </exec>
+      <copy file="medialibrarystub.h"
+            tofile="${src.dir}/cpp/client/medialibrarystub.h"/>
+      <delete file="medialibrarystub.h"/>
+   </target>
+
+
+   <target name="build.client" depends="generate.client.stub">
       <cc outtype="executable" subsystem="console"
-          outfile="${dist.dir}/cppSeriesLibrary"
-          objdir="${obj.dir}">
+          outfile="${dist.dir}/mediaLibraryClient"
+          objdir="${obj.dir}/client">
 	  <compilerarg value="-std=c++14"/>
           <includepath>
              <dirset dir="/" includes="usr/include,usr/local/include,usr/include/jsoncpp"/>
           </includepath>
-          <libset dir="/usr/lib" libs="stdc++,fltk,fltk_images,curl,jsoncpp,pthread"/>
-          <libset dir="/usr/local/lib" libs="curlpp"/>
-          <fileset dir="${src.cpp.dir}/client/" includes="MediaClientGui.cpp, SeriesSeason.cpp, Episode.cpp, MediaLibrary.cpp,samplemain.cpp"/>
+          <libset dir="/usr/local/lib" libs="stdc++,fltk,fltk_images,curl,curlpp,jsoncpp,pthread,jsonrpccpp-client,jsonrpccpp-common,microhttpd"/>
+          <!-- <libset dir="/usr/local/lib" libs="curlpp"/> -->
+          <fileset dir="${src.dir}/cpp/client/" includes="MediaClientGui.cpp, samplemain.cpp"/>
+          <fileset dir="${src.dir}/cpp/server/" includes="SeriesSeason.cpp, Episode.cpp, MediaLibrary.cpp"/>
       </cc>
    </target>
 
+  <target name="generate.server.stub" depends="prepare">
+      <exec dir="${basedir}" executable="jsonrpcstub">
+         <arg line="${json.file.name} --cpp-server=medialibraryserverstub"/>
+      </exec>
+      <copy file="medialibrarystub.h"
+            tofile="${src.dir}/cpp/server/medialibraryserverstub.h"/>
+      <delete file="medialibrarystub.h"/>
+   </target>
+
+
+   <target name="build.server" depends="generate.server.stub">
+      <cc outtype="executable" subsystem="console"
+          outfile="${dist.dir}/mediaLibraryServer"
+          objdir="${obj.dir}/server">
+	  <compilerarg value="-std=c++14"/>
+          <includepath>
+             <dirset dir="/" includes="usr/include,usr/local/include,usr/include/jsoncpp"/>
+          </includepath>
+          <libset dir="/usr/lib" libs="stdc++,fltk,fltk_images,curl,curlpp,jsoncpp,pthread,jsonrpccpp-server,jsonrpccpp-common,microhttpd"/>
+          <!-- <libset dir="/usr/local/lib" libs="curlpp"/> -->
+          <fileset dir="${src.cpp.dir}/cpp/server" 
+            includes="SeriesSeason.cpp, Episode.cpp, MediaLibrary.cpp, MediaLibraryServer.cpp"/>
+      </cc>
+   </target>
+<!-- 
    <target name="execute" depends="build">
      <echo message="./bin/cppSeriesLibrary ${userId} ${omdbkey}"/>
      <exec executable="./bin/cppSeriesLibrary">
        <arg line= "${userId} ${omdbkey}"/>
      </exec>
-   </target>
+   </target> -->
 
 </project>

@@ -484,7 +484,7 @@ int main(int argc, char * argv[]) {
    std::string host = "http://127.0.0.1:8080";
    int ret = -1;
    if(argc>1){
-      host = string(argv[1]);
+      host = string(argv[3]);
    }
 
    HttpClient httpclient(host);
