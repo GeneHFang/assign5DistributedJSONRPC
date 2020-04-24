@@ -49,7 +49,7 @@ public:
    virtual bool addLibrary(const Json::Value& aLibraryJson);
    virtual bool addToLibrary(const Json::Value& aSeriesSeasonJson);
    virtual bool removeFromLibrary(std::string key);
-   virtual Json::Value getJson(std::string key);
+   virtual Json::Value getJson();
    virtual Json::Value get(std::string aTitle);
    virtual Json::Value getTitles();
    
@@ -177,8 +177,6 @@ int main(int argc, char * argv[]) {
       //<< " press return/enter to quit." << endl;
         << " use ps to get pid. To quit: kill -9 pid " << endl;
    ss.StartListening();
-   while(true){
-   }
    //int c = getchar();
    ss.StopListening();
    return 0;

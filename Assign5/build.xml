@@ -18,9 +18,9 @@
    <property name="json.file.name" value="MediaLibraryMethods.json"/>
 
    <target name="targets">
-     <echo message="targets are clean, prepare, build.server, build.client, generate.server.stub, generate.client.stub, targets"/>
-     <echo message="to run server enter: ./bin/mediaLibraryServer ${port-num}"/>
-     <echo message="to run client enter: ./bin/mediaLibraryClient ${userId} ${omdbkey} http://${host.name}:${port.num} "/>
+     <echo message="targets are clean, prepare, server, client, build.server, build.client, generate.server.stub, generate.client.stub, targets"/>
+     <echo message="to run server enter: ant server -DportNum=${port-num}"/>
+     <echo message="to run client enter: ant client -DuserId=${userId} -Domdbkey=${omdbkey} -DhostName=${host.name} -DportNum=${port.num} "/>
    </target>
 
    <path id="compile.classpath">
@@ -98,6 +98,13 @@
       </cc>
    </target>
 
+   <target name="client" depends="build.client">
+     <echo message="./bin/mediaLibraryClient ${userId} ${omdbkey} http://${host.name}:${port.num}"/>
+     <exec executable="./bin/mediaLibraryClient">
+       <arg line= "${userId} ${omdbkey} http://${host.name}:${port.num}"/>
+     </exec>
+   </target>
+
   <target name="generate.server.stub" depends="prepare">
       <exec dir="${basedir}" executable="jsonrpcstub">
          <arg line="${json.file.name} --cpp-server=medialibraryserverstub"/>
@@ -121,6 +128,13 @@
           <fileset dir="${src.dir}/cpp/server" 
             includes="SeriesSeason.cpp, Episode.cpp, MediaLibrary.cpp, MediaLibraryServer.cpp"/>
       </cc>
+   </target>
+
+   <target name="server" depends="build.server">
+     <echo message="./bin/mediaLibraryServer ${port.num}"/>
+     <exec executable="./bin/mediaLibraryServer">
+       <arg line= "${port.num}"/>
+     </exec>
    </target>
 <!-- 
    <target name="execute" depends="build">
