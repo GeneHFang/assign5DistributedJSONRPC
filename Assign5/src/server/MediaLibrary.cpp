@@ -40,6 +40,19 @@ MediaLibrary::MediaLibrary(){
    initLibraryFromJsonFile("seriesTest.json");
 }
 
+//Constructor from Json::Value object
+MediaLibrary::MediaLibrary(Json::Value library){
+   Json::Value::Members mbr = library.getMemberNames();
+   for(vector<string>::const_iterator i = mbr.begin(); i!= mbr.end(); i++){
+      Json::Value jsonMedia = root[*i];
+      SeriesSeason * aDesc = new SeriesSeason(jsonMedia);
+      //cout << *i << endl;
+      media[*i] = *aDesc;
+      cout << "initializing ";
+      aDesc->print();
+   }
+}
+
 //Destructor
 MediaLibrary::~MediaLibrary() {
    media.clear();

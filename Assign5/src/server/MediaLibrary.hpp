@@ -35,6 +35,7 @@ public:
 
    //Constructor/Destructor
    MediaLibrary();
+   MediaLibrary(Json::Value initLibrary);
    ~MediaLibrary();
 
    //Appends a map of seriesSeasons to current library

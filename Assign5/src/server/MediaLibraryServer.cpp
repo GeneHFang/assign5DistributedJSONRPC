@@ -45,7 +45,7 @@ public:
    virtual std::string serviceInfo();
    virtual void printMap();
    virtual bool toJsonFile();
-   virtual bool initLibraryFromJsonFile(std::string jsonFileName);
+   virtual Json::Value initLibraryFromJsonFile(std::string jsonFileName);
    virtual bool addLibrary(const Json::Value& aLibraryJson);
    virtual bool addToLibrary(const Json::Value& aSeriesSeasonJson);
    virtual bool removeFromLibrary(std::string key);
@@ -82,9 +82,10 @@ bool MediaLibraryServer::toJsonFile(){
    return ret;
 }
 
-bool MediaLibraryServer::initLibraryFromJsonFile(){
+Json::Value MediaLibraryServer::initLibraryFromJsonFile(){
    cout << "restoring collection from seriesTest.json" << endl;
-   bool ret = library->initLibraryFromJsonFile("seriesTest.json");
+   library->initLibraryFromJsonFile("seriesTest.json");
+   Json::Value ret = getJson();
    return ret;
 }
 

@@ -92,6 +92,7 @@ public:
    std::string omdbkey;
 
    std::thread * playThread;
+   medialibrarystub * mlStub;
    MediaLibrary * library;
    MediaLibrary * searchLibrary;
 
@@ -203,7 +204,7 @@ public:
          o->summaryMLI->readonly(1);
          o->searchLibrary->media.clear();
          o->searchLibrary->addToLibrary(s);
-         o->searchLibrary->printMap();
+         // o->searchLibrary->printMap();
 
          //Build tree from just search result
          o->buildTree(o->searchLibrary);
@@ -338,12 +339,12 @@ public:
       string selectPath(picked);
       // cout << "Selected Menu Path: " << selectPath << endl;
       // Handle menu selections
-      if(selectPath.compare("File/Save")==0){ //save library to seriesTest.json 
-         bool restSave = library->toJsonFile("seriesTest.json");
+      if(selectPath.compare("File/Save")==0){ //save library to server's seriesTest.json 
+         bool restSave = mlStub->toJsonFile("seriesTest.json");
          // cout << "Save not implemented" << endl;
       }else if(selectPath.compare("File/Restore")==0){ //load library from seriesTest.json
          //Restore tree from seriesTest
-         library->initLibraryFromJsonFile("seriesTest.json");
+         mlStub->initLibraryFromJsonFile("seriesTest.json");
          buildTree();
          // cout << "Restore not implemented" << endl;
       }else if(selectPath.compare("File/Tree Refresh")==0){ //largely unneeded, as adding and removing both refresh tree
@@ -355,12 +356,12 @@ public:
          exit(0);
       }else if(selectPath.compare("Series-Season/Add")==0){ //add current search result to library
          searchLibrary->printMap();
-         library->addLibrary(searchLibrary->media);
+         mlStub->addLibrary(searchLibrary->getJson());
          buildTree();
          // cout << "Add not implemented" << endl;
       }else if(selectPath.compare("Series-Season/Remove")==0){ //remove current search result from library
          string key = searchLibrary->media.begin()->second.titleAndSeason;
-         library->removeFromLibrary(key);
+         mlStub->removeFromLibrary(key);
          buildTree();
          // cout << "Remove not implemented" << endl;
       }
@@ -407,7 +408,9 @@ public:
    }
 
    void buildTree(){
-      
+      MediaLibrary * temp = new MediaLibrary(mlStub->getJson());
+      delete library;
+      library = temp;
       // std::cout << "before vector of results is created" << std::endl;
       vector<string> result = library->getTitles();
          cout << "server has titles";
@@ -459,17 +462,16 @@ public:
          tree->redraw();
    }
 
-   MediaClient(const char * name = "Tim", const char * key = "myKey") : MediaClientGui(name) {
+   MediaClient(const char * name = "Tim", const char * key = "myKey", const medialibrarystub * ml) : MediaClientGui(name) {
       searchButt->callback(SearchCallbackS, (void*)this);
       menubar->callback(Menu_ClickedS, (void*)this);
       tree->callback(TreeCallbackS, (void*)this);
       callback(ClickedX);
       omdbkey = key;
       userId = "Tim.Lindquist";
-
-      //Initial library from seriesTest.json
-      library = new MediaLibrary();
-      library->initLibraryFromJsonFile("seriesTest.json");
+      mlStub = ml;
+      //Initial library from server's seriesTest.json
+      library = new MediaLibrary(ml->getJson());
 
       //Initial search result library is empty
       searchLibrary = new MediaLibrary();
@@ -480,16 +482,26 @@ public:
 
 int main(int argc, char * argv[]) {
    std::string host = "http://127.0.0.1:8080";
+   int ret = -1;
    if(argc>1){
       host = string(argv[1]);
    }
 
    HttpClient httpclient(host);
-   studentcollectionstub sc(httpclient);
+   medialibrarystub ml(httpclient);
 
-   std::string developer = (argc>1)?argv[1]:"Tim.Lindquist";
-   std::string omdbkey = (argc>2)?argv[2]:"omdbkey";
-   std::string windowTitle = developer + "'s SeriesSeason Browser";
-   MediaClient cm(windowTitle.c_str(),omdbkey.c_str());
-   return (Fl::run());
+   std::cout << "Connecting to Server..." << endl;
+   try {
+    
+      std::string developer = (argc>1)?argv[1]:"Tim.Lindquist";
+      std::string omdbkey = (argc>2)?argv[2]:"omdbkey";
+      std::string windowTitle = developer + "'s SeriesSeason Browser";
+      MediaClient cm(windowTitle.c_str(),omdbkey.c_str(),&ml);
+      ret = Fl::run()
+
+   }
+   catch(JsonRpcException e) {
+      std::cerr << e.what() << endl;
+   }
+   return ();
 }
