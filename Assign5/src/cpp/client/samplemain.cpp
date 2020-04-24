@@ -501,5 +501,5 @@ int main(int argc, char * argv[]) {
    catch(JsonRpcException e) {
       std::cerr << e.what() << endl;
    }
-   return ();
+   return (ret);
 }
