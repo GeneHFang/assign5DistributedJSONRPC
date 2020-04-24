@@ -23,8 +23,6 @@
 
 #include <jsonrpccpp/client/connectors/httpclient.h>
 #include "medialibrarystub.h"
-#include "../server/SeriesSeason.hpp"
-#include "../server/Episode.hpp"
 
 using namespace jsonrpc;
 using namespace std;
@@ -497,7 +495,7 @@ int main(int argc, char * argv[]) {
       std::string omdbkey = (argc>2)?argv[2]:"omdbkey";
       std::string windowTitle = developer + "'s SeriesSeason Browser";
       MediaClient cm(windowTitle.c_str(),omdbkey.c_str(),&ml);
-      ret = Fl::run()
+      ret = Fl::run();
 
    }
    catch(JsonRpcException e) {
