@@ -176,6 +176,9 @@ int main(int argc, char * argv[]) {
       //<< " press return/enter to quit." << endl;
         << " use ps to get pid. To quit: kill -9 pid " << endl;
    ss.StartListening();
+   while(true){
+      //think that's all I need?
+   }
    //int c = getchar();
    ss.StopListening();
    return 0;
