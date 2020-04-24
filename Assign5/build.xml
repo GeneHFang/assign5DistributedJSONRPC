@@ -20,7 +20,7 @@
    <target name="targets">
      <echo message="targets are clean, prepare, server, client, build.server, build.client, generate.server.stub, generate.client.stub, targets"/>
      <echo message="to run server enter: ant server -DportNum=${port-num}"/>
-     <echo message="to run client enter: ant client -DuserId=${userId} -Domdbkey=${omdbkey} -DhostName=${host.name} -DportNum=${port.num} "/>
+     <echo message="to run client enter: ant client -DuserId=${userId} -Domdbkey=${omdbkey} -Dhost.name=${host.name} -Dport.num=${port.num} "/>
    </target>
 
    <path id="compile.classpath">
