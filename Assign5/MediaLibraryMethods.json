@@ -1,0 +1,42 @@
+[
+    {
+        "method": "toJsonFile",
+        "params":[ ],
+        "returns": true
+    },
+    {
+        "method": "initLibraryFromJsonFile",
+        "params":["string"],
+        "returns": { }
+    },
+    {   
+        "method": "addLibrary",
+        "params":[{ }],
+        "returns": true
+    },
+    {   
+        "method": "addToLibrary",
+        "params":[{ }],
+        "returns": true
+    },
+    {   
+        "method": "removeFromLibrary",
+        "params":["string"],
+        "returns": true
+    },
+    {   
+        "method": "getJson",
+        "params":[],
+        "returns":{ }
+    },
+    {   
+        "method": "get",
+        "params":["key"],
+        "returns":{ }
+    },
+    {   
+        "method": "getTitles",
+        "params":[],
+        "returns": [ ]
+    }
+]
