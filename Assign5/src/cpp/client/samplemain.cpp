@@ -460,7 +460,7 @@ public:
          tree->redraw();
    }
 
-   MediaClient(const char * name = "Tim", const char * key = "myKey", const medialibrarystub * ml) : MediaClientGui(name) {
+   MediaClient(const char * name = "Tim", const char * key = "myKey", const medialibrarystub * ml = new medialibrarystub(HttpClient httpclient("http://127.0.0.1:8080");)) : MediaClientGui(name) {
       searchButt->callback(SearchCallbackS, (void*)this);
       menubar->callback(Menu_ClickedS, (void*)this);
       tree->callback(TreeCallbackS, (void*)this);
