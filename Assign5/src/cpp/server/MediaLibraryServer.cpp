@@ -48,9 +48,9 @@ public:
    virtual Json::Value initLibraryFromJsonFile();
    virtual bool addLibrary(const Json::Value& aLibraryJson);
    virtual bool addToLibrary(const Json::Value& aSeriesSeasonJson);
-   virtual bool removeFromLibrary(std::string key);
+   virtual bool removeFromLibrary(const std::string& key);
    virtual Json::Value getJson();
-   virtual Json::Value get(std::string aTitle);
+   virtual Json::Value get(const std::string& aTitle);
    virtual Json::Value getTitles();
    
 private: 
@@ -111,7 +111,7 @@ bool MediaLibraryServer::addToLibrary(const Json::Value& aSeriesSeasonJson) {
    return ret;
 }
 
-bool MediaLibraryServer::removeFromLibrary(string key) {
+bool MediaLibraryServer::removeFromLibrary(const string& key) {
    cout << "Removing " << key << endl;
    bool ret = library->removeFromLibrary(key);
    return ret;
@@ -123,7 +123,7 @@ Json::Value MediaLibraryServer::getJson(){
 }
 
 
-Json::Value MediaLibraryServer::get(string key){
+Json::Value MediaLibraryServer::get(const string& key){
     cout << "Getting SeriesSeason " << key << endl;
     return library->get(key).toJson();
 }
