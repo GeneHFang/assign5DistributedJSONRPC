@@ -116,7 +116,7 @@
           <includepath>
              <dirset dir="/" includes="usr/include,usr/local/include,usr/include/jsoncpp"/>
           </includepath>
-          <libset dir="/usr/lib" libs="stdc++,fltk,fltk_images,curl,curlpp,jsoncpp,pthread,jsonrpccpp-server,jsonrpccpp-common,microhttpd"/>
+          <libset dir="/usr/lib" libs="stdc++,curl,jsoncpp,pthread,jsonrpccpp-server,jsonrpccpp-common,microhttpd"/>
           <!-- <libset dir="/usr/local/lib" libs="curlpp"/> -->
           <fileset dir="${src.dir}/cpp/server" 
             includes="SeriesSeason.cpp, Episode.cpp, MediaLibrary.cpp, MediaLibraryServer.cpp"/>
