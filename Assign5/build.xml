@@ -102,7 +102,7 @@
       <exec dir="${basedir}" executable="jsonrpcstub">
          <arg line="${json.file.name} --cpp-server=medialibraryserverstub"/>
       </exec>
-      <copy file="medialibrarystub.h"
+      <copy file="medialibraryserverstub.h"
             tofile="${src.dir}/cpp/server/medialibraryserverstub.h"/>
       <delete file="medialibraryserverstub.h"/>
    </target>
