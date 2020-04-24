@@ -38,6 +38,7 @@
 
 using namespace std;
 StudentCollection::StudentCollection(){
+   std::cout << "Inside constructor call" << endl;
    resetFromJsonFile("students.json");
 }
 
