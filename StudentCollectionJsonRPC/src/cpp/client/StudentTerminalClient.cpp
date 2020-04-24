@@ -71,6 +71,7 @@ int main(int argc, char*argv[]) {
    }
    // the server is communicating via http requests, so create a stub object.
    HttpClient httpclient(host);
+   cout << "Constructor call" << endl;
    studentcollectionstub sc(httpclient);
    // to use tcp sockets instead of http uncomment below (comment above), and the include
    // for tcpsocketclient.h above. If not running locally, you will need to input ip & port
