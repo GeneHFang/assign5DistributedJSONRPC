@@ -44,7 +44,7 @@ MediaLibrary::MediaLibrary(){
 MediaLibrary::MediaLibrary(Json::Value library){
    Json::Value::Members mbr = library.getMemberNames();
    for(vector<string>::const_iterator i = mbr.begin(); i!= mbr.end(); i++){
-      Json::Value jsonMedia = root[*i];
+      Json::Value jsonMedia = library[*i];
       SeriesSeason * aDesc = new SeriesSeason(jsonMedia);
       //cout << *i << endl;
       media[*i] = *aDesc;
@@ -59,9 +59,11 @@ MediaLibrary::~MediaLibrary() {
 }
 
 //Appends a map of seriesSeasons to current library
-void MediaLibrary::addLibrary(std::map<std::string, SeriesSeason> lib)
-{
+bool MediaLibrary::addLibrary(std::map<std::string, SeriesSeason> lib)
+{ 
+   int size = media.size();
    media.insert(lib.begin(),lib.end());
+   return (size < media.size());
 }
 
 //Appends a single SeriesSeason instance to current library (uses C++17 syntax)

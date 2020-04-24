@@ -39,7 +39,7 @@ public:
    ~MediaLibrary();
 
    //Appends a map of seriesSeasons to current library
-   void addLibrary(std::map<std::string, SeriesSeason> media);
+   bool addLibrary(std::map<std::string, SeriesSeason> media);
 
    //Appends a single SeriesSeason instance to current library (uses C++17 syntax)
    bool addToLibrary(SeriesSeason ss);

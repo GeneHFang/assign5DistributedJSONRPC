@@ -45,7 +45,7 @@ public:
    virtual std::string serviceInfo();
    virtual void printMap();
    virtual bool toJsonFile();
-   virtual Json::Value initLibraryFromJsonFile(std::string jsonFileName);
+   virtual Json::Value initLibraryFromJsonFile();
    virtual bool addLibrary(const Json::Value& aLibraryJson);
    virtual bool addToLibrary(const Json::Value& aSeriesSeasonJson);
    virtual bool removeFromLibrary(std::string key);
