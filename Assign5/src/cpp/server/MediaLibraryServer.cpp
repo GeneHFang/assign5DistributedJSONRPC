@@ -43,7 +43,6 @@ class MediaLibraryServer : public medialibraryserverstub {
 public:
    MediaLibraryServer(AbstractServerConnector &connector, int port);
    virtual std::string serviceInfo();
-   virtual void printMap();
    virtual bool toJsonFile();
    virtual Json::Value initLibraryFromJsonFile();
    virtual bool addLibrary(const Json::Value& aLibraryJson);
