@@ -104,7 +104,7 @@
       </exec>
       <copy file="medialibrarystub.h"
             tofile="${src.dir}/cpp/server/medialibraryserverstub.h"/>
-      <delete file="medialibrarystub.h"/>
+      <delete file="medialibraryserverstub.h"/>
    </target>
 
 
